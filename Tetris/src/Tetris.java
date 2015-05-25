@@ -1,7 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 import javax.swing.border.*;
+
 import java.util.*;
 
 //테트리스 게임~
@@ -21,7 +23,8 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 	private ArrayList<Item> itemList; // 아이템리스트
 	private ArrayList<Color> colorList; // 컬러리스트
 	private Random rnd;
-	private JPanel top, next, center; // 상단 가리는부분
+	private JPanel top, next, center,right; // 상단 가리는부분
+	private JLabel topScore; // 상부 점수 표시
 	private boolean isKey = true; // 키보드활성화여부
 	private final Color bgColor = new Color(250, 250, 220); // 배경컬러
 	// public static boolean isRight = false; //오른쪽여부
@@ -32,13 +35,14 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 		this.setTitle(str);
 		this.xCnt = 14;
 		this.yCnt = 25;
-		this.time = 300;
+		this.time = 100;
 		this.area = 20;
 		this.score = 100;
-		this.width = this.xCnt * this.area;
+		this.width = this.xCnt * this.area + 200; // 우측 여유분
 		this.height = this.yCnt * this.area;
 		this.itemList = new ArrayList<Item>();
 		this.background = new JPanel[this.xCnt][this.yCnt];
+		
 		this.grid = new boolean[this.xCnt][this.yCnt];
 		this.rnd = new Random(System.currentTimeMillis());
 		this.fc = this.getContentPane();
@@ -46,6 +50,7 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 		this.center.setSize(this.width, this.height);
 		this.center.setLayout(null);
 		this.center.setBackground(new Color(250, 250, 220));
+		
 		this.fc.add(this.center, "Center");
 		this.addKeyListener(this);
 		this.setBounds(200, 200, this.width + 8, this.height + 13);
@@ -69,14 +74,21 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 		// 상단 셋팅 시작======
 		this.top = new JPanel();
 		this.next = new JPanel();
+		this.right = new JPanel();
 		this.top.setBounds(0, 0, this.xCnt * this.area, this.area * 4);
-		this.top.setBackground(new Color(244, 211, 99));
+		this.top.setBackground(new Color(250, 250, 220));
 		this.next.setBounds((this.xCnt - 4) * this.area, 0, this.area * 4,
 				this.area * 4);
 		this.next.setBackground(new Color(245, 180, 250));
+		this.right.setBounds(this.xCnt * this.area,0,200,this.height);
+		this.right.setBackground(Color.YELLOW);
+		this.topScore = new JLabel("SCORE"+this.score); // 점수판 추가
+		this.right.add(topScore);
+		this.center.add(this.right);
 		this.center.add(this.top);
 		this.top.setLayout(null);
 		this.top.add(this.next);
+		
 		// 상단 셋팅 끝======
 		// 백그라운드 패널 셋팅 시작 ==========
 		for (int i = 0; i < background.length; i++) {
@@ -171,6 +183,9 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 				deleteLine(i);
 				System.out.println(i + "줄 없앰");
 				this.score += 100; // 점수 계산
+				System.out.println("Score갱신 : "+score);
+				this.topScore.setText("Score" + this.score);
+				this.right.repaint();
 			}
 		}
 	}

@@ -12,6 +12,7 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 	private int yCnt; // 세로배열크기
 	private int area; // 가로세로길이
 	private int time; // 빠르기
+	private int score; // 점수
 	private boolean[][] grid; //
 	private JPanel[][] background; // 배경판넬
 	private Container fc; // 컨테이너
@@ -33,6 +34,7 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 		this.yCnt = 25;
 		this.time = 300;
 		this.area = 20;
+		this.score = 100;
 		this.width = this.xCnt * this.area;
 		this.height = this.yCnt * this.area;
 		this.itemList = new ArrayList<Item>();
@@ -168,6 +170,7 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 			{
 				deleteLine(i);
 				System.out.println(i + "줄 없앰");
+				this.score += 100; // 점수 계산
 			}
 		}
 	}
@@ -308,7 +311,7 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 	public void run() {
 		try {
 			while (true) {
-				Thread.sleep(this.time);
+				Thread.sleep(this.time * (1500/this.score)); // 점수에 따른 속도증가 1500당 2배
 				// 판넬위쪽이면 키리스너 동작X
 				if (this.currentItem.getCurrentXY().getY() < 3)
 					this.isKey = false;

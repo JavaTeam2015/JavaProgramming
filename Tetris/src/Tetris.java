@@ -45,7 +45,7 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 		this.center = new JPanel();
 		this.center.setSize(this.width, this.height);
 		this.center.setLayout(null);
-		this.center.setBackground(new Color(224, 255, 216));
+		this.center.setBackground(new Color(250, 250, 220));
 		this.fc.add(this.center, "Center");
 		this.addKeyListener(this);
 		this.setBounds(200, 200, this.width + 8, this.height + 13);
@@ -325,6 +325,6 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 	}
 
 	public static void main(String[] args) {
-		new Tetris("테트리스 Beta Ver 0.5");
+		new Tetris("테트리스 ");
 	}
 }

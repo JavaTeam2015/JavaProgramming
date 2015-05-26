@@ -25,11 +25,14 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 	private Random rnd;
 	private JPanel top, next, center,right; // 상단 가리는부분
 	private JLabel topScore; // 상부 점수 표시
+	private JLabel topTime; // 시간표시
 	private boolean isKey = true; // 키보드활성화여부
 	private final Color bgColor = new Color(250, 250, 220); // 배경컬러
+	private int nowMin,nowSecond,firstMin,firstSecond;
 	// public static boolean isRight = false; //오른쪽여부
 	Thread t;
-
+	Calendar now = Calendar.getInstance();
+	
 	public Tetris(String str) {
 		// ========== 기본설정 셋팅 시작 ===========
 		this.setTitle(str);
@@ -42,6 +45,11 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 		this.height = this.yCnt * this.area;
 		this.itemList = new ArrayList<Item>();
 		this.background = new JPanel[this.xCnt][this.yCnt];
+		//시간세팅시작
+		
+		firstMin = now.get(Calendar.MINUTE);
+		firstSecond = now.get(Calendar.SECOND);
+		//현재시간입력 끝
 		
 		this.grid = new boolean[this.xCnt][this.yCnt];
 		this.rnd = new Random(System.currentTimeMillis());
@@ -88,6 +96,10 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 		this.center.add(this.top);
 		this.top.setLayout(null);
 		this.top.add(this.next);
+		this.topTime = new JLabel("0분  0초");
+		this.right.add(topTime);
+		
+		
 		
 		// 상단 셋팅 끝======
 		// 백그라운드 패널 셋팅 시작 ==========
@@ -324,15 +336,23 @@ public class Tetris extends JFrame implements Runnable, KeyListener {
 
 	// 쓰레드메인
 	public void run() {
+		
+		this.right.repaint();
 		try {
 			while (true) {
-				Thread.sleep(this.time * (1500/this.score)); // 점수에 따른 속도증가 1500당 2배
+				Thread.sleep(this.time * (3000/this.score)); // 점수에 따른 속도증가 1500당 2배
 				// 판넬위쪽이면 키리스너 동작X
 				if (this.currentItem.getCurrentXY().getY() < 3)
 					this.isKey = false;
 				else
 					this.isKey = true;
 				goDown(); // 아이템밑으로이동
+				
+				nowMin = now.get(Calendar.MINUTE);
+				nowSecond = now.get(Calendar.SECOND);
+				this.topTime.setText((nowMin-firstMin)+"분 "+(nowSecond-firstSecond)+"초");
+				System.out.println(nowMin+"분"+nowSecond+"초");
+		
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
